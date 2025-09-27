@@ -4,8 +4,12 @@ import './App.css'
 function App() {
   const [gifs, setGifs] = useState([]);
   const API_KEY = import.meta.env.VITE_API_KEY;
-  const limit = 20;
-  const URL = `https://api.giphy.com/v1/gifs/trending?api_key=${API_KEY}&limit=${limit}`;
+  const limit = 18;
+  const URL = `https://api.giphy.com/v1/gifs/trending?api_key=${API_KEY}&limit=${limit}&offset=${getRandomInt(100)}`;
+
+  function getRandomInt(max) {
+    return Math.floor(Math.random() * max);
+  }
 
   useEffect(() => {
     async function getGifs(){
@@ -33,11 +37,26 @@ function App() {
     gap: "10px"
   }
 
+  const cardStyle = {
+    width: "200px",
+    height: "150px",
+    overflow: "hidden"
+  }
+
+  const imageStyle = {
+    width: "100%",
+    height: "100%",
+    objectFit: "cover",
+    objectPosition: "center"
+  }
+
   return (
     <>
       <div style={gridStyle}>
         {gifs.map((gif) => (
-          <img key={gif.id} src={gif.images.fixed_height.url} alt={gif.title} />
+          <div style={cardStyle}>
+            <img key={gif.id} src={gif.images.fixed_height.url} alt={gif.title} style={imageStyle} />
+          </div> 
         ))}
       </div>
     </>
