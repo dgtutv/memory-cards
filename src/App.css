@@ -78,6 +78,13 @@ h3 {
   align-self: flex-start;
 }
 
+.mainStyle {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center
+}
+
 /* Media queries - must come AFTER the main rules */
 @media screen and (max-width: 1250px) {
   .grid {
@@ -101,6 +108,10 @@ h3 {
   .card {
     width: 100px;
     height: 130px;
+  }
+
+  .mainStyle {
+    justify-content: flex-start;
   }
 
   .card:active {

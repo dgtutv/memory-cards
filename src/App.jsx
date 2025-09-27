@@ -82,20 +82,6 @@ function App() {
     
   }, [])
 
-  const mainStyle = {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "flex-start",
-    alignItems: "center"
-  }
-
-  const mobileStyle = {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "space-between",
-    alignItems: "center"
-  }
-
   const pickRandom = () => {
     if (gifs.length <= screenLimit) return gifs;
     const randomOffset = getRandomInt(gifs.length - screenLimit);
@@ -106,65 +92,32 @@ function App() {
   return (
     <>
       {loading && <h2>Loading...</h2>}
-      {screenWidth <= 475 &&
-        <>
-          <div style={mobileStyle}>
-            <h1>Memory Game</h1>
-            <h3>Current Score: {score}</h3>
-            <h3>High Score: {highScore}</h3>
-          </div>
-          <div className='grid'>
-            {pickRandom().map((gif) => (
-              <div className="card" key={gif.id}alt={gif.title} onClick={()=>{
-                  if(!gifsClicked.includes(gif.id)){
-                    setGifsClicked([...gifsClicked, gif.id]);
-                    setScore(score + 1);
-                  }
-                  else{
-                    if(highScore < score){
-                      setHighScore(score);
-                      localStorage.setItem(`highScore`, score.toString());
-                    }
-                    setScore(0);
-                    setGifsClicked([]);
-                  }
-                }}>
-                <img src={gif.images.fixed_height.url} />
-              </div> 
-            ))}
-          </div>
-          <h3>Remember which GIFs you've already chosen.</h3>
-        </>
-      }
-      {screenWidth > 475 && 
-      <>
-        <div style={mainStyle}>
-          <h1>Memory Game</h1>
-          <h3>Current Score: {score}</h3>
-          <h3>High Score: {highScore}</h3>
-        </div>
-        <div className='grid'>
-          {pickRandom().map((gif) => (
-            <div className="card" key={gif.id}alt={gif.title} onClick={()=>{
-                if(!gifsClicked.includes(gif.id)){
-                  setGifsClicked([...gifsClicked, gif.id]);
-                  setScore(score + 1);
+      <div className='mainStyle'>
+        <h1>Memory Game</h1>
+        <h3>Current Score: {score}</h3>
+        <h3>High Score: {highScore}</h3>
+      </div>
+      <div className='grid'>
+        {pickRandom().map((gif) => (
+          <div className="card" key={gif.id}alt={gif.title} onClick={()=>{
+              if(!gifsClicked.includes(gif.id)){
+                setGifsClicked([...gifsClicked, gif.id]);
+                setScore(score + 1);
+              }
+              else{
+                if(highScore < score){
+                  setHighScore(score);
+                  localStorage.setItem(`highScore`, score.toString());
                 }
-                else{
-                  if(highScore < score){
-                    setHighScore(score);
-                    localStorage.setItem(`highScore`, score.toString());
-                  }
-                  setScore(0);
-                  setGifsClicked([]);
-                }
-              }}>
-              <img src={gif.images.fixed_height.url} />
-            </div> 
-          ))}
-        </div>
-        <h2>Remember which GIFs you've already chosen.</h2>
-      </>}
+                setScore(0);
+                setGifsClicked([]);
+              }
+            }}>
+            <img src={gif.images.fixed_height.url} />
+          </div> 
+        ))}
+      </div>
+      <h3>Remember which GIFs you've already chosen.</h3>
       <h5>Powered by GIPHY</h5>
     </>
   );
