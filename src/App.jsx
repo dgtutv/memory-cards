@@ -6,6 +6,10 @@ function App() {
   const API_KEY = import.meta.env.VITE_API_KEY;
   const limit = 18;
   const URL = `https://api.giphy.com/v1/gifs/trending?api_key=${API_KEY}&limit=${limit}&offset=${getRandomInt(100)}`;
+  const [gifsClicked, setGifsClicked] = useState([]);
+  const [score, setScore] = useState(0);
+  const [highScore, setHighScore] = useState(0);
+  const [loading, setLoading] = useState(true);
 
   function getRandomInt(max) {
     return Math.floor(Math.random() * max);
@@ -13,17 +17,21 @@ function App() {
 
   useEffect(() => {
     async function getGifs(){
-      try{
+      try {
+        setLoading(true);
         const response = await fetch(URL);
-        if(!response.ok){
-            throw new Error("Incorrect URL or connection issue.");
+        if (!response.ok) {
+          throw new Error("Incorrect URL or connection issue.");
         }
         const data = await response.json();
         return data.data;
       } 
-      catch(error){
-          console.error("Error:", error);
-          return [];
+      catch (error) {
+        console.error("Error:", error);
+        return [];
+      } 
+      finally {
+        setLoading(false);
       }
     }
 
@@ -50,17 +58,41 @@ function App() {
     objectPosition: "center"
   }
 
+  const mainStyle = {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "flex-start"
+  }
+
   return (
     <>
+      {loading && <h2>Loading...</h2>}
+      <div style={mainStyle}>
+        <h2>Current Score: {score}</h2>
+        <h2>High Score: {highScore}</h2>
+      </div>
       <div style={gridStyle}>
         {gifs.map((gif) => (
           <div style={cardStyle}>
-            <img key={gif.id} src={gif.images.fixed_height.url} alt={gif.title} style={imageStyle} />
+            <img key={gif.id} src={gif.images.fixed_height.url} alt={gif.title} style={imageStyle} onClick={()=>{
+              if(!gifsClicked.includes(gif.id)){
+                setGifsClicked([...gifsClicked, gif.id]);
+                setScore(score + 1);
+              }
+              else{
+                if(highScore < score){
+                  setHighScore(score);
+                }
+                setScore(0);
+                setGifsClicked([]);
+              }
+            }}/>
           </div> 
         ))}
       </div>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
