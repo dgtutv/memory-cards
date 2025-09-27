@@ -13,10 +13,19 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
 
-
   function getRandomInt(max) {
     return Math.floor(Math.random() * max);
   }
+
+  useEffect(() => {
+    const savedScore = localStorage.getItem('highScore');
+    if (savedScore){
+      setHighScore(savedScore);
+    }
+    else{
+      setHighScore(0);
+    }
+  }, []);
 
   useEffect(() => {
     const handleResize = () => {
@@ -114,6 +123,7 @@ function App() {
                   else{
                     if(highScore < score){
                       setHighScore(score);
+                      localStorage.setItem(`highScore`, score.toString());
                     }
                     setScore(0);
                     setGifsClicked([]);
@@ -143,6 +153,7 @@ function App() {
                 else{
                   if(highScore < score){
                     setHighScore(score);
+                    localStorage.setItem(`highScore`, score.toString());
                   }
                   setScore(0);
                   setGifsClicked([]);
