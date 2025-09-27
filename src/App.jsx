@@ -86,8 +86,6 @@ function App() {
     justifyContent: "space-between",
     alignItems: "center"
   }
-  
-  // Save score via cookies
 
   const pickRandom = () => {
     if (gifs.length <= screenLimit) return gifs;
