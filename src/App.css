@@ -115,10 +115,4 @@ h3 {
     width: 90px;
     height: 90px;
   }
-
-  .card:active {
-    transform: translateY(-2px);
-    cursor: pointer;
-    border-color: white;
-  }
 }
