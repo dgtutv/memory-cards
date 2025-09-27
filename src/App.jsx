@@ -11,10 +11,45 @@ function App() {
   const [score, setScore] = useState(0);
   const [highScore, setHighScore] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+
 
   function getRandomInt(max) {
     return Math.floor(Math.random() * max);
   }
+
+  useEffect(() => {
+    const handleResize = () => {
+      setScreenWidth(window.innerWidth);
+      if (screenWidth > 1250){
+        setScreenLimit(18);
+      }
+      if (screenWidth < 1250 && screenWidth > 1125){
+        setScreenLimit(15);
+      }
+      if (screenWidth < 1125 && screenWidth > 690){
+        setScreenLimit(12);
+      }
+
+      if (screenWidth < 690 && screenWidth > 480){
+        setScreenLimit(6);
+      }
+
+      if (screenWidth < 480){
+        setScreenLimit(12);
+      }
+      
+    };
+
+    // Call handleResize on initial load
+    handleResize();
+    
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize)
+    }
+  }, [screenWidth, loading])
 
   useEffect(() => {
     async function getGifs(){
@@ -40,21 +75,22 @@ function App() {
     
   }, [])
 
-  const gridStyle = {
-    display: "flex",
-    flexWrap: "wrap",
-    gap: "10px"
-  }
-
   const mainStyle = {
     display: "flex",
     flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "flex-start"
+    justifyContent: "flex-start",
+    alignItems: "center"
+  }
+
+  const mobileStyle = {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
+    alignItems: "center"
   }
   
-  // Add phone integration
-  // Game over screen
+  // Save score via cookies
+  //Add attributation
 
   const pickRandom = () => {
     if (gifs.length <= screenLimit) return gifs;
@@ -66,29 +102,63 @@ function App() {
   return (
     <>
       {loading && <h2>Loading...</h2>}
-      <div style={mainStyle}>
-        <h2>Current Score: {score}</h2>
-        <h2>High Score: {highScore}</h2>
-      </div>
-      <div style={gridStyle}>
-        {pickRandom().map((gif) => (
-          <div className="card">
-            <img key={gif.id} src={gif.images.fixed_height.url} alt={gif.title} onClick={()=>{
-              if(!gifsClicked.includes(gif.id)){
-                setGifsClicked([...gifsClicked, gif.id]);
-                setScore(score + 1);
-              }
-              else{
-                if(highScore < score){
-                  setHighScore(score);
+      {screenWidth <= 475 &&
+        <>
+          <div style={mobileStyle}>
+            <h1>Memory Game</h1>
+            <h3>Current Score: {score}</h3>
+            <h3>High Score: {highScore}</h3>
+          </div>
+          <div className='grid'>
+            {pickRandom().map((gif) => (
+              <div className="card" key={gif.id}alt={gif.title} onClick={()=>{
+                  if(!gifsClicked.includes(gif.id)){
+                    setGifsClicked([...gifsClicked, gif.id]);
+                    setScore(score + 1);
+                  }
+                  else{
+                    if(highScore < score){
+                      setHighScore(score);
+                    }
+                    setScore(0);
+                    setGifsClicked([]);
+                  }
+                }}>
+                <img src={gif.images.fixed_height.url} />
+              </div> 
+            ))}
+          </div>
+          <h3>Remember which GIFs you've already chosen.</h3>
+        </>
+      }
+      {screenWidth > 475 && 
+      <>
+        <div style={mainStyle}>
+          <h1>Memory Game</h1>
+          <h2>Remember which GIFs you've already chosen.</h2>
+          <h3>Current Score: {score}</h3>
+          <h3>High Score: {highScore}</h3>
+        </div>
+        <div className='grid'>
+          {pickRandom().map((gif) => (
+            <div className="card" key={gif.id}alt={gif.title} onClick={()=>{
+                if(!gifsClicked.includes(gif.id)){
+                  setGifsClicked([...gifsClicked, gif.id]);
+                  setScore(score + 1);
                 }
-                setScore(0);
-                setGifsClicked([]);
-              }
-            }}/>
-          </div> 
-        ))}
-      </div>
+                else{
+                  if(highScore < score){
+                    setHighScore(score);
+                  }
+                  setScore(0);
+                  setGifsClicked([]);
+                }
+              }}>
+              <img src={gif.images.fixed_height.url} />
+            </div> 
+          ))}
+        </div>
+      </>}
     </>
   );
 }
