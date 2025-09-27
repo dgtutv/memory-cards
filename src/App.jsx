@@ -21,22 +21,18 @@ function App() {
   useEffect(() => {
     const handleResize = () => {
       setScreenWidth(window.innerWidth);
-      if (screenWidth > 1250){
+      if (screenWidth > 1350){
         setScreenLimit(18);
       }
-      if (screenWidth < 1250 && screenWidth > 1125){
+      if (screenWidth < 1350 && screenWidth > 1125){
         setScreenLimit(15);
       }
-      if (screenWidth < 1125 && screenWidth > 690){
+      if (screenWidth < 1125 && screenWidth > 920){
         setScreenLimit(12);
       }
 
-      if (screenWidth < 690 && screenWidth > 480){
-        setScreenLimit(6);
-      }
-
-      if (screenWidth < 480 && screenWidth > 350){
-        setScreenLimit(12);
+      if (screenWidth < 920 && screenWidth > 350) {
+        setScreenLimit(9);
       }
 
       if (screenWidth < 350){
@@ -44,8 +40,6 @@ function App() {
       }
       
     };
-
-    // Call handleResize on initial load
     handleResize();
     
     window.addEventListener('resize', handleResize);
