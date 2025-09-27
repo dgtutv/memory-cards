@@ -4,14 +4,13 @@ import './App.css'
 function App() {
   const [gifs, setGifs] = useState([]);
   const API_KEY = import.meta.env.VITE_API_KEY;
-  const limit = 18;
-  const URL = `https://api.giphy.com/v1/gifs/trending?api_key=${API_KEY}&limit=${limit}&offset=${getRandomInt(50)}`;
+  const limit = 50;
+  const [screenLimit, setScreenLimit] = useState(18);
+  const URL = `https://api.giphy.com/v1/gifs/trending?api_key=${API_KEY}&limit=${limit}&offset=${getRandomInt(limit)}`;
   const [gifsClicked, setGifsClicked] = useState([]);
   const [score, setScore] = useState(0);
   const [highScore, setHighScore] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [refreshTrigger, setRefreshTrigger] = useState(0);
-
 
   function getRandomInt(max) {
     return Math.floor(Math.random() * max);
@@ -39,7 +38,7 @@ function App() {
 
     getGifs().then((gifs) => setGifs(gifs));
     
-  }, [refreshTrigger])
+  }, [])
 
   const gridStyle = {
     display: "flex",
@@ -67,6 +66,11 @@ function App() {
     alignItems: "flex-start"
   }
 
+  const pickRandom = () => {
+    const randomOffset = getRandomInt(limit-screenLimit);
+    return gifs.slice(randomOffset, randomOffset + screenLimit);
+  }
+
   return (
     <>
       {loading && <h2>Loading...</h2>}
@@ -75,7 +79,7 @@ function App() {
         <h2>High Score: {highScore}</h2>
       </div>
       <div style={gridStyle}>
-        {gifs.map((gif) => (
+        {pickRandom().map((gif) => (
           <div style={cardStyle}>
             <img key={gif.id} src={gif.images.fixed_height.url} alt={gif.title} style={imageStyle} onClick={()=>{
               if(!gifsClicked.includes(gif.id)){
@@ -89,7 +93,6 @@ function App() {
                 setScore(0);
                 setGifsClicked([]);
               }
-              setRefreshTrigger(prev => prev + 1);
             }}/>
           </div> 
         ))}
