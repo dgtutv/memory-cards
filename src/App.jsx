@@ -46,26 +46,15 @@ function App() {
     gap: "10px"
   }
 
-  const cardStyle = {
-    width: "200px",
-    height: "150px",
-    overflow: "hidden"
-  }
-
-  const imageStyle = {
-    width: "100%",
-    height: "100%",
-    objectFit: "cover",
-    objectPosition: "center"
-    
-  }
-
   const mainStyle = {
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "flex-start"
   }
+  
+  // Add phone integration
+  // Game over screen
 
   const pickRandom = () => {
     if (gifs.length <= screenLimit) return gifs;
@@ -83,8 +72,8 @@ function App() {
       </div>
       <div style={gridStyle}>
         {pickRandom().map((gif) => (
-          <div style={cardStyle}>
-            <img key={gif.id} src={gif.images.fixed_height.url} alt={gif.title} style={imageStyle} onClick={()=>{
+          <div className="card">
+            <img key={gif.id} src={gif.images.fixed_height.url} alt={gif.title} onClick={()=>{
               if(!gifsClicked.includes(gif.id)){
                 setGifsClicked([...gifsClicked, gif.id]);
                 setScore(score + 1);
