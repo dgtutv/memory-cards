@@ -5,11 +5,13 @@ function App() {
   const [gifs, setGifs] = useState([]);
   const API_KEY = import.meta.env.VITE_API_KEY;
   const limit = 18;
-  const URL = `https://api.giphy.com/v1/gifs/trending?api_key=${API_KEY}&limit=${limit}&offset=${getRandomInt(100)}`;
+  const URL = `https://api.giphy.com/v1/gifs/trending?api_key=${API_KEY}&limit=${limit}&offset=${getRandomInt(50)}`;
   const [gifsClicked, setGifsClicked] = useState([]);
   const [score, setScore] = useState(0);
   const [highScore, setHighScore] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
+
 
   function getRandomInt(max) {
     return Math.floor(Math.random() * max);
@@ -37,7 +39,7 @@ function App() {
 
     getGifs().then((gifs) => setGifs(gifs));
     
-  }, [])
+  }, [refreshTrigger])
 
   const gridStyle = {
     display: "flex",
@@ -87,6 +89,7 @@ function App() {
                 setScore(0);
                 setGifsClicked([]);
               }
+              setRefreshTrigger(prev => prev + 1);
             }}/>
           </div> 
         ))}
