@@ -35,8 +35,12 @@ function App() {
         setScreenLimit(6);
       }
 
-      if (screenWidth < 480){
+      if (screenWidth < 480 && screenWidth > 350){
         setScreenLimit(12);
+      }
+
+      if (screenWidth < 350){
+        setScreenLimit(8);
       }
       
     };
