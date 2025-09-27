@@ -4,7 +4,7 @@ import './App.css'
 function App() {
   const [gifs, setGifs] = useState([]);
   const API_KEY = import.meta.env.VITE_API_KEY;
-  const limit = 50;
+  const limit = 80;
   const [screenLimit, setScreenLimit] = useState(18);
   const URL = `https://api.giphy.com/v1/gifs/trending?api_key=${API_KEY}&limit=${limit}&offset=${getRandomInt(limit)}`;
   const [gifsClicked, setGifsClicked] = useState([]);
@@ -57,6 +57,7 @@ function App() {
     height: "100%",
     objectFit: "cover",
     objectPosition: "center"
+    
   }
 
   const mainStyle = {
@@ -67,9 +68,11 @@ function App() {
   }
 
   const pickRandom = () => {
-    const randomOffset = getRandomInt(limit-screenLimit);
+    if (gifs.length <= screenLimit) return gifs;
+    const randomOffset = getRandomInt(gifs.length - screenLimit);
     return gifs.slice(randomOffset, randomOffset + screenLimit);
   }
+
 
   return (
     <>
