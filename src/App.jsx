@@ -94,7 +94,6 @@ function App() {
   }
   
   // Save score via cookies
-  //Add attributation
 
   const pickRandom = () => {
     if (gifs.length <= screenLimit) return gifs;
@@ -139,7 +138,6 @@ function App() {
       <>
         <div style={mainStyle}>
           <h1>Memory Game</h1>
-          <h2>Remember which GIFs you've already chosen.</h2>
           <h3>Current Score: {score}</h3>
           <h3>High Score: {highScore}</h3>
         </div>
@@ -162,7 +160,9 @@ function App() {
             </div> 
           ))}
         </div>
+        <h2>Remember which GIFs you've already chosen.</h2>
       </>}
+      <h5>Powered by GIPHY</h5>
     </>
   );
 }
